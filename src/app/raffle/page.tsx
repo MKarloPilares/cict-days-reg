@@ -1,43 +1,76 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { SnowflakeIcon as Confetti } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { getRaffleEntries, setWin } from "@/lib/actions/registration"
+
+interface Entry {
+  id: number;
+  createdAt: Date;
+  studId: string;
+  win: boolean;
+  stud: {
+    id: string;
+    studLevel: string;
+    lastName: string;
+    firstName: string;
+    middleName: string;
+    birthday: Date;
+    createdAt: Date;
+  };
+}
 
 export default function Raffle() {
   const [winner, setWinner] = useState<string | null>("N/A")
   const [isDrawing, setIsDrawing] = useState(false)
   const [showConfetti, setShowConfetti] = useState(false)
+  const [entries, setEntries] = useState<Entry[]>([])
+  const [participants, setParticipants] = useState<string[]>([])
 
-  const participants = [
-    "Karlo Pilares",
-    "Joshua Datinguinoo",
-    "Kent Kalaw",
-    "Jed Balita",
-    "Ara Panahon",
-    "Precious De Castro",
-  ]
+  useEffect(() => {
+    const fetchParticipants = async () => {
+      const fetchedEntries = await getRaffleEntries()
+      setEntries(fetchedEntries)
+
+      const participantNames = fetchedEntries.map((entry) => 
+        entry.stud.firstName + " " + entry.stud.middleName + " " + entry.stud.lastName
+      )
+      setParticipants(participantNames)
+    }
+
+    fetchParticipants()
+  }, [showConfetti]) 
 
   const drawWinner = () => {
     setIsDrawing(true)
     setWinner(null)
-
+  
     let counter = 0
     const interval = setInterval(() => {
       setWinner(participants[counter % participants.length])
       counter++
-
+  
       if (counter > 20) {
         clearInterval(interval)
         setIsDrawing(false)
-    
-        const randomWinner = participants[Math.floor(Math.random() * participants.length)]
-        setWinner(randomWinner)
-        setShowConfetti(true)
-        setTimeout(() => setShowConfetti(false), 5000)
+  
+        const randomWinnerName = participants[Math.floor(Math.random() * participants.length)]
+  
+        const winnerEntry = entries.find(entry => {
+          const participantFullName = `${entry.stud.firstName} ${entry.stud.middleName} ${entry.stud.lastName}`
+          return participantFullName === randomWinnerName
+        })
+  
+        if (winnerEntry) {
+          setWinner(randomWinnerName)
+          setWin(winnerEntry.id)
+          setShowConfetti(true)
+          setTimeout(() => setShowConfetti(false), 5000)
+        }
       }
     }, 100)
   }
@@ -84,10 +117,7 @@ export default function Raffle() {
                 {winner ? (
                   <>
                     <div className="relative">
-                          {winner
-                            .split(" ")
-                            .map((n) => n[0])
-                            .join("")}
+                      `&quot;`
                       <div className="absolute -bottom-2 -right-2 bg-primary text-primary-foreground rounded-full p-2">
                         🏆
                       </div>

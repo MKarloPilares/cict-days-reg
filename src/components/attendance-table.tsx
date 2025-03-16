@@ -1,97 +1,64 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Search, ArrowUpDown, Download, UserCheck } from "lucide-react"
+import { Search, ArrowUpDown, UserCheck } from "lucide-react"
+import { getRegistrations } from "@/lib/actions/registration"
 
 interface Attendee {
-  id: number
+  id: string
   name: string
-  studentId: string
-  course: string
-  yearLevel: string
-  educationalLevel: string
+  studentLevel: string
+  win: boolean
 }
 
 export default function AttendanceTable() {
-  const initialAttendees: Attendee[] = [
-    {
-      id: 1,
-      name: "Joshua Datinguinoo",
-      studentId: "2202901",
-      course: "BSIT",
-      yearLevel: "4th year",
-      educationalLevel: "College",
-    },
-    {
-      id: 2,
-      name: "Kent Kalaw",
-      studentId: "2202901",
-      course: "BSIT",
-      yearLevel: "4th year",
-      educationalLevel: "College",
-    },
-    {
-      id: 3,
-      name: "Jed Balita",
-      studentId: "2202901",
-      course: "BSIT",
-      yearLevel: "4th year",
-      educationalLevel: "College",
-    },
-    {
-      id: 4,
-      name: "Ara Panahon",
-      studentId: "2202901",
-      course: "BSIT",
-      yearLevel: "4th year",
-      educationalLevel: "College",
-    },
-    {
-      id: 5,
-      name: "Karlo Pilares",
-      studentId: "2202901",
-      course: "BSIT",
-      yearLevel: "4th year",
-      educationalLevel: "College",
-    },
-    {
-      id: 6,
-      name: "Precious De Castro",
-      studentId: "2202901",
-      course: "BSIT",
-      yearLevel: "4th year",
-      educationalLevel: "College",
-    },
-  ]
-
-  const [attendees, setAttendees] = useState<Attendee[]>(initialAttendees)
+  const [initialAttendees, setInitialAttendees] = useState<Attendee[]>([])
+  const [attendees, setAttendees] = useState<Attendee[]>([])
+  const [showWinners, setShowWinners] = useState(false);
   const [searchTerm, setSearchTerm] = useState("")
   const [sortConfig, setSortConfig] = useState<{ key: keyof Attendee; direction: "ascending" | "descending" } | null>(
     null,
   )
 
+  useEffect(() => {
+    const fetchRegistrations = async () => {
+      const fetchedRegistrations = await getRegistrations();
+
+    const mappedAttendees = fetchedRegistrations.map((reg) => ({
+      id: reg.stud.id,
+      name: reg.stud.firstName + " " + reg.stud.lastName, 
+      studentLevel: reg.stud.studLevel, 
+      win: reg.win, 
+    }))
+
+    setInitialAttendees(mappedAttendees);
+    setAttendees(mappedAttendees);
+  }
+    fetchRegistrations();
+  }, []) 
+
   // Search functionality
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    setSearchTerm(value)
-
+    const value = e.target.value.toLowerCase(); // Ensure case-insensitive search
+    setSearchTerm(value);
+  
     if (value === "") {
-      setAttendees(initialAttendees)
+      setAttendees(initialAttendees); // Reset to initial attendees when search term is cleared
     } else {
       const filteredResults = initialAttendees.filter(
         (attendee) =>
-          attendee.name.toLowerCase().includes(value.toLowerCase()) ||
-          attendee.studentId.includes(value) ||
-          attendee.course.toLowerCase().includes(value.toLowerCase()),
-      )
-      setAttendees(filteredResults)
+          attendee.name.toLowerCase().includes(value) || // Ensure case-insensitive comparison
+          attendee.id.toLowerCase().includes(value) || 
+          attendee.studentLevel.toLowerCase().includes(value),
+      );
+      setAttendees(filteredResults);
     }
-  }
+  };
+  
 
   // Sorting functionality
   const requestSort = (key: keyof Attendee) => {
@@ -124,6 +91,16 @@ export default function AttendanceTable() {
     return sortConfig.direction === "ascending" ? "↑" : "↓"
   }
 
+  const handleWinnersClick = () => {
+    setShowWinners(!showWinners);
+    if (showWinners) {
+      setAttendees(initialAttendees);
+    } else {
+      const winners = initialAttendees.filter((attendee) => attendee.win);
+      setAttendees(winners);
+    }
+  }
+
   return (
     <div className="w-full">
       <div>
@@ -143,9 +120,8 @@ export default function AttendanceTable() {
                 onChange={handleSearch}
               />
             </div>
-            <Button variant="outline" size="sm" className="gap-1">
-              <Download className="h-4 w-4" />
-              Export
+            <Button variant="outline" size="sm" className="gap-1" onClick={handleWinnersClick}>
+              {!showWinners ? "Winners" : "All"}
             </Button>
           </div>
         </div>
@@ -171,11 +147,11 @@ export default function AttendanceTable() {
                   <Button
                     variant="ghost"
                     className="p-0 font-semibold hover:bg-transparent"
-                    onClick={() => requestSort("studentId")}
+                    onClick={() => requestSort("id")}
                   >
                     Student ID
                     <ArrowUpDown className="ml-2 h-4 w-4" />
-                    {getSortDirectionIndicator("studentId")}
+                    {getSortDirectionIndicator("id")}
                   </Button>
                 </TableHead>
                 <TableHead>
@@ -186,8 +162,6 @@ export default function AttendanceTable() {
                     Course
                   </Button>
                 </TableHead>
-                <TableHead>Year Level</TableHead>
-                <TableHead>Educational Level</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -196,14 +170,8 @@ export default function AttendanceTable() {
                   <TableRow key={attendee.id} className="hover:bg-muted/50">
                     <TableCell className="font-medium">{index + 1}</TableCell>
                     <TableCell className="font-medium">{attendee.name}</TableCell>
-                    <TableCell>{attendee.studentId}</TableCell>
-                    <TableCell>
-                      <Badge variant="outline" className="bg-primary/10">
-                        {attendee.course}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>{attendee.yearLevel}</TableCell>
-                    <TableCell>{attendee.educationalLevel}</TableCell>
+                    <TableCell>{attendee.id}</TableCell>
+                    <TableCell>{attendee.studentLevel}</TableCell>
                   </TableRow>
                 ))
               ) : (
