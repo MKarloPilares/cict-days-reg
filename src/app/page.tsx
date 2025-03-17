@@ -186,8 +186,8 @@ export default function WelcomePage() {
                 Explore the Future of Technology
               </h3>
               <p className="text-gray-700">
-                Join us for workshops, talks, and hands-on experiences with
-                cutting-edge technology
+              Join us as we hear from experts and industry leaders about the latest trends and 
+              opportunities that students can engage with to shape their future careers!
               </p>
             </div>
           </div>

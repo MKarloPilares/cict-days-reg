@@ -14,6 +14,8 @@ const createStudent = async ({
   lastName,
   firstName,
   middleName,
+  prefCourse,
+  mobile,
   birthday,
 }: {
   id: string;
@@ -21,6 +23,8 @@ const createStudent = async ({
   lastName: string;
   firstName: string;
   middleName: string;
+  prefCourse: string;
+  mobile: string;
   birthday: Date;
 }) => {
   const student = await prisma.students.create({
@@ -31,6 +35,8 @@ const createStudent = async ({
       firstName,
       middleName,
       birthday,
+      prefCourse,
+      mobile,
     },
   });
 

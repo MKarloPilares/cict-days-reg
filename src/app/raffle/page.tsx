@@ -158,7 +158,7 @@ export default function Raffle() {
         <CardFooter>
           <Button
             size="lg"
-            className="w-full text-lg font-medium"
+            className="w-full text-lg font-medium bg-[#8AAAE5] hover:bg-[#7792c4]"
             onClick={drawWinner}
             disabled={isDrawing}
           >
@@ -168,7 +168,7 @@ export default function Raffle() {
         <CardFooter>
           <Button
             size="lg"
-            className="w-full text-lg font-medium"
+            className="w-full text-lg font-medium bg-[#EA738D] hover:bg-[#c56e81]"
             onClick={() => router.push("/attendance")}
             disabled={isDrawing}
           >

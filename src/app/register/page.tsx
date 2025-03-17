@@ -25,6 +25,8 @@ export default function Register() {
   const [firstName, setFirstName] = useState("");
   const [middleName, setMiddleName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [course, setCourse] = useState("");
+  const [mobile, setMobile] = useState("");
   const [birthday, setBirthday] = useState<Date | null>(null);
   const [student, setStudent] = useState<Students | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -48,12 +50,15 @@ export default function Register() {
           } catch (error) {
             console.log(error);
             alert("This student is already registered");
+            setIsSubmitting(false);
           }
         } else {
           alert("Birthday does not match the student's birthday");
+          setIsSubmitting(false);
         }
       } else {
         alert("Please input birthday");
+        setIsSubmitting(false);
       }
     } else {
       if (birthday) {
@@ -64,6 +69,8 @@ export default function Register() {
             lastName: lastName,
             firstName: firstName,
             middleName: middleName,
+            prefCourse: course,
+            mobile: mobile,
             birthday: birthday, // Make sure birthday is never null here
           });
           await createRegistration({ id: studNum });
@@ -71,6 +78,7 @@ export default function Register() {
         } catch (error) {
           console.log(error);
           alert("This student is already registered");
+          setIsSubmitting(false);
         }
       }
     }
@@ -208,7 +216,7 @@ export default function Register() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="birthday" className="text-base">
-                  Birthday
+                  Birthday <span className="text-blue-500">(For Verification)</span>
                 </Label>
                 <div className="relative">
                   <Calendar className="text-muted-foreground pointer-events-none absolute top-3 left-3 z-10 h-5 w-5" />
@@ -290,8 +298,32 @@ export default function Register() {
                 />
               </div>
               <div className="space-y-2">
+                <Label htmlFor="stand" className="text-base">
+                  Preferred Program(Course)
+                </Label>
+                <Input
+                  id="strand"
+                  placeholder="Enter your preferred program"
+                  onChange={e => setCourse(e.target.value)}
+                  className="h-12"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="mobile" className="text-base">
+                  Mobile Number
+                </Label>
+                <Input
+                  id="mobile"
+                  placeholder="Enter your mobile number"
+                  onChange={e => setMobile(e.target.value)}
+                  className="h-12"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
                 <Label htmlFor="birthday" className="text-base">
-                  Birthday
+                  Birthday <span className="text-blue-500">(For Verification)</span>
                 </Label>
                 <div className="relative">
                   <Calendar className="text-muted-foreground pointer-events-none absolute top-3 left-3 z-10 h-5 w-5" />

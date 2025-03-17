@@ -20,6 +20,8 @@ interface Attendee {
   id: string;
   name: string;
   studentLevel: string;
+  prefCourse: string;
+  mobile: string;
   win: boolean;
 }
 
@@ -48,6 +50,8 @@ export default function AttendanceTable() {
           " " +
           reg.stud.lastName,
         studentLevel: reg.stud.studLevel,
+        prefCourse: reg.stud.prefCourse,
+        mobile: reg.stud.mobile,
         win: reg.win,
       }));
 
@@ -69,7 +73,9 @@ export default function AttendanceTable() {
         attendee =>
           attendee.name.toLowerCase().includes(value) || // Ensure case-insensitive comparison
           attendee.id.toLowerCase().includes(value) ||
-          attendee.studentLevel.toLowerCase().includes(value),
+          attendee.studentLevel.toLowerCase().includes(value) || 
+          attendee.prefCourse.toLowerCase().includes(value) ||
+          attendee.mobile.toLowerCase().includes(value),
       );
       setAttendees(filteredResults);
     }
@@ -201,7 +207,23 @@ export default function AttendanceTable() {
                     variant="ghost"
                     className="p-0 font-semibold hover:bg-transparent"
                   >
+                    Level
+                  </Button>
+                </TableHead>
+                <TableHead>
+                  <Button
+                    variant="ghost"
+                    className="p-0 font-semibold hover:bg-transparent"
+                  >
                     Course
+                  </Button>
+                </TableHead>
+                <TableHead>
+                  <Button
+                    variant="ghost"
+                    className="p-0 font-semibold hover:bg-transparent"
+                  >
+                    Mobile
                   </Button>
                 </TableHead>
               </TableRow>
@@ -216,6 +238,8 @@ export default function AttendanceTable() {
                     </TableCell>
                     <TableCell>{attendee.id}</TableCell>
                     <TableCell>{attendee.studentLevel}</TableCell>
+                    <TableCell>{attendee.prefCourse}</TableCell>
+                    <TableCell>{attendee.mobile}</TableCell>
                   </TableRow>
                 ))
               ) : (

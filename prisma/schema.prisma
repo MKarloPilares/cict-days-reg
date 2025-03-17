@@ -19,6 +19,8 @@ model Students {
   lastName    String
   firstName   String
   middleName  String
+  prefCourse  String
+  mobile      String
   birthday    DateTime @db.Date 
   createdAt   DateTime @default(now()) @map("created_at")
 
