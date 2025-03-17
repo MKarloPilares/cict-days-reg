@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Calendar,
@@ -18,6 +19,7 @@ import {
 
 export default function WelcomePage() {
   const [mounted, setMounted] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     setMounted(true);
@@ -190,7 +192,7 @@ export default function WelcomePage() {
             </div>
           </div>
         </div>
-        <Button className="mt-4 w-full rounded-full bg-[#8B1A1A] py-6 text-lg text-white hover:bg-[#6B1414] md:w-auto">
+        <Button className="mt-4 w-full rounded-full bg-[#8B1A1A] py-6 text-lg text-white hover:bg-[#6B1414] md:w-auto" onClick={() => router.push("/register")}>
           Register Now
           <ChevronRight className="ml-2 h-5 w-5" />
         </Button>
