@@ -20,6 +20,7 @@ export default function AttendanceTable() {
   const [initialAttendees, setInitialAttendees] = useState<Attendee[]>([])
   const [attendees, setAttendees] = useState<Attendee[]>([])
   const [showWinners, setShowWinners] = useState(false)
+  const [showsNonWinners, setShowNonWinners] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
   const router = useRouter()
   const [sortConfig, setSortConfig] = useState<{ key: keyof Attendee; direction: "ascending" | "descending" } | null>(
@@ -94,13 +95,19 @@ export default function AttendanceTable() {
   }
 
   const handleWinnersClick = () => {
-    setShowWinners(!showWinners);
-    if (showWinners) {
+    if (showWinners && showsNonWinners) {
+      setShowNonWinners(!showsNonWinners);
+      setShowWinners(!showWinners);
       setAttendees(initialAttendees);
-    } else {
+    } else if (!showWinners && !showsNonWinners) {
       const winners = initialAttendees.filter((attendee) => attendee.win);
       setAttendees(winners);
-    }
+      setShowNonWinners(!showsNonWinners);
+    } else if(!showWinners && showsNonWinners) {
+      const winners = initialAttendees.filter((attendee) => !attendee.win);
+      setAttendees(winners);
+      setShowWinners(!showWinners);
+   }
   }
 
   return (
@@ -123,7 +130,7 @@ export default function AttendanceTable() {
               />
             </div>
             <Button variant="outline" size="sm" className="gap-1" onClick={handleWinnersClick}>
-              {!showWinners ? "Winners" : "All"}
+              {showWinners ? "Non-Winners" : (showsNonWinners ? "Winners" : "All")}
             </Button>
             <Button variant="outline" size="sm" className="gap-1" onClick={() => router.push("/raffle")}>
               Back To Raffle

@@ -27,6 +27,7 @@ export default function Register() {
   const [lastName, setLastName] = useState("");
   const [birthday, setBirthday] = useState<Date | null>(null);
   const [student, setStudent] = useState<Students | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
   const handleStudIdChange = async (studId: string) => {
@@ -34,6 +35,7 @@ export default function Register() {
   }
 
   const handleRegister = async () => {
+    setIsSubmitting(true)
     if (registrationType === "college") {
       if (birthday && student?.birthday) {
         if (format(birthday, 'yyyy-MM-dd') === format(student?.birthday, 'yyyy-MM-dd')) {
@@ -171,6 +173,9 @@ export default function Register() {
                     className="h-12"
                     disabled
                   />
+                  <p className="text-muted-foreground text-xs">
+                    Enter your student ID to automatically fill this field.
+                  </p>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="middle-name" className="text-base">
@@ -182,6 +187,9 @@ export default function Register() {
                     className="h-12"
                     disabled
                   />
+                  <p className="text-muted-foreground text-xs">
+                    Enter your student ID to automatically fill this field.
+                  </p>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="last-name" className="text-base">
@@ -193,6 +201,9 @@ export default function Register() {
                     className="h-12"
                     disabled
                   />
+                  <p className="text-muted-foreground text-xs">
+                    Enter your student ID to automatically fill this field.
+                  </p>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="birthday" className="text-base">
@@ -308,7 +319,7 @@ export default function Register() {
               variant={"destructive"}
               className="mt-4 flex h-12 w-full items-center justify-center gap-2 text-base"
               onClick={handleRegister}
-              disabled={!registrationType}
+              disabled={!registrationType || isSubmitting}
             >
               Register
               <ChevronRight className="h-4 w-4" />
