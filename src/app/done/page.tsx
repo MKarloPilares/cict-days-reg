@@ -3,9 +3,12 @@
 import Image from "next/image";
 import React from "react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 export default function Done() {
+  const router = useRouter();
+
   return (
     <div className="min-h-svh w-full bg-gray-50">
       <div className="mx-auto flex justify-center px-4 py-3 md:justify-center">
@@ -34,7 +37,7 @@ export default function Done() {
           </p>
         </div>
         <div className="mt-10 flex h-full justify-center">
-          <Button className="rounded-lg bg-[#8B1A1A] px-18 py-6 text-lg font-bold text-white hover:bg-[#6B1414]">
+          <Button className="rounded-lg bg-[#8B1A1A] px-18 py-6 text-lg font-bold text-white hover:bg-[#6B1414]" onClick={() => router.push("/")}>
             Go Back
           </Button>
         </div>

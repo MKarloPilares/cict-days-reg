@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { getRaffleEntries, setWin } from "@/lib/actions/registration"
+import { useRouter } from "next/navigation"
 
 interface Entry {
   id: number;
@@ -30,6 +31,7 @@ export default function Raffle() {
   const [showConfetti, setShowConfetti] = useState(false)
   const [entries, setEntries] = useState<Entry[]>([])
   const [participants, setParticipants] = useState<string[]>([])
+  const router = useRouter()
 
   useEffect(() => {
     const fetchParticipants = async () => {
@@ -139,6 +141,11 @@ export default function Raffle() {
         <CardFooter>
           <Button size="lg" className="w-full text-lg font-medium" onClick={drawWinner} disabled={isDrawing}>
             {isDrawing ? "Drawing..." : "Draw Raffle"}
+          </Button>
+        </CardFooter>
+        <CardFooter>
+          <Button size="lg" className="w-full text-lg font-medium" onClick={() => router.push("/attendance")} disabled={isDrawing}>
+            View Attendees
           </Button>
         </CardFooter>
       </Card>

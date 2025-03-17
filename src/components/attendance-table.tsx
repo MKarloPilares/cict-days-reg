@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Search, ArrowUpDown, UserCheck } from "lucide-react"
 import { getRegistrations } from "@/lib/actions/registration"
+import { useRouter } from "next/navigation"
 
 interface Attendee {
   id: string
@@ -18,8 +19,9 @@ interface Attendee {
 export default function AttendanceTable() {
   const [initialAttendees, setInitialAttendees] = useState<Attendee[]>([])
   const [attendees, setAttendees] = useState<Attendee[]>([])
-  const [showWinners, setShowWinners] = useState(false);
+  const [showWinners, setShowWinners] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
+  const router = useRouter()
   const [sortConfig, setSortConfig] = useState<{ key: keyof Attendee; direction: "ascending" | "descending" } | null>(
     null,
   )
@@ -30,7 +32,7 @@ export default function AttendanceTable() {
 
     const mappedAttendees = fetchedRegistrations.map((reg) => ({
       id: reg.stud.id,
-      name: reg.stud.firstName + " " + reg.stud.lastName, 
+      name: reg.stud.firstName + " " + reg.stud.middleName + " " + reg.stud.lastName, 
       studentLevel: reg.stud.studLevel, 
       win: reg.win, 
     }))
@@ -122,6 +124,9 @@ export default function AttendanceTable() {
             </div>
             <Button variant="outline" size="sm" className="gap-1" onClick={handleWinnersClick}>
               {!showWinners ? "Winners" : "All"}
+            </Button>
+            <Button variant="outline" size="sm" className="gap-1" onClick={() => router.push("/raffle")}>
+              Back To Raffle
             </Button>
           </div>
         </div>
