@@ -37,7 +37,10 @@ export default function Done() {
           </p>
         </div>
         <div className="mt-10 flex h-full justify-center">
-          <Button className="rounded-lg bg-[#8B1A1A] px-18 py-6 text-lg font-bold text-white hover:bg-[#6B1414]" onClick={() => router.push("/")}>
+          <Button
+            className="rounded-lg bg-[#8B1A1A] px-18 py-6 text-lg font-bold text-white hover:bg-[#6B1414]"
+            onClick={() => router.push("/")}
+          >
             Go Back
           </Button>
         </div>

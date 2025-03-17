@@ -31,47 +31,50 @@ export default function Register() {
   const router = useRouter();
 
   const handleStudIdChange = async (studId: string) => {
-    setStudent(await getStudent({id: studId}))
-  }
+    setStudent(await getStudent({ id: studId }));
+  };
 
   const handleRegister = async () => {
-    setIsSubmitting(true)
+    setIsSubmitting(true);
     if (registrationType === "college") {
       if (birthday && student?.birthday) {
-        if (format(birthday, 'yyyy-MM-dd') === format(student?.birthday, 'yyyy-MM-dd')) {
+        if (
+          format(birthday, "yyyy-MM-dd") ===
+          format(student?.birthday, "yyyy-MM-dd")
+        ) {
           try {
-            await createRegistration({id: student!.id});
-            router.push("/done")
+            await createRegistration({ id: student!.id });
+            router.push("/done");
           } catch (error) {
             console.log(error);
-            alert ("This student is already registered");
+            alert("This student is already registered");
           }
-        } else{
+        } else {
           alert("Birthday does not match the student's birthday");
         }
       } else {
         alert("Please input birthday");
       }
     } else {
-        if (birthday) {
-          try{ 
-            await createStudent({
-              id: studNum,
-              studLevel: registrationType,
-              lastName: lastName,
-              firstName: firstName,
-              middleName: middleName,
-              birthday: birthday, // Make sure birthday is never null here
-            });
-            await createRegistration({id: studNum});
-            router.push("/done");
-          } catch(error) {
-            console.log(error);
-            alert ("This student is already registered")
-          }
+      if (birthday) {
+        try {
+          await createStudent({
+            id: studNum,
+            studLevel: registrationType,
+            lastName: lastName,
+            firstName: firstName,
+            middleName: middleName,
+            birthday: birthday, // Make sure birthday is never null here
+          });
+          await createRegistration({ id: studNum });
+          router.push("/done");
+        } catch (error) {
+          console.log(error);
+          alert("This student is already registered");
         }
+      }
     }
-  }
+  };
 
   return (
     <div className="min-h-svh w-full bg-gray-50">
@@ -96,234 +99,232 @@ export default function Register() {
             </p>
           </div>
 
-            <div className="space-y-3">
-              <Label className="text-base">I am registering as:</Label>
-              <RadioGroup
-                value={registrationType}
-                onValueChange={setRegistrationType}
-                className="grid grid-cols-1 gap-2"
-              >
-                <Label
-                  htmlFor="college"
-                  className={cn(
-                    "flex cursor-pointer items-center space-x-3 rounded-lg border p-4 transition-colors",
-                    registrationType === "college"
-                      ? "border-primary bg-primary/5"
-                      : "hover:bg-muted/50",
-                  )}
-                >
-                  <RadioGroupItem value="college" id="college" />
-                  <div className="flex-1">
-                    <div className="font-medium">College Student</div>
-                    <div className="text-muted-foreground text-sm">
-                      CICT Students
-                    </div>
-                  </div>
-                </Label>
-
-                <Label
-                  htmlFor="senior-high"
-                  className={cn(
-                    "flex cursor-pointer items-center space-x-3 rounded-lg border p-4 transition-colors",
-                    registrationType === "senior-high"
-                      ? "border-primary bg-primary/5"
-                      : "hover:bg-muted/50",
-                  )}
-                >
-                  <RadioGroupItem value="senior-high" id="senior-high"/>
-                  <div className="flex-1">
-                    <div className="font-medium">
-                      Senior High School Student
-                    </div>
-                    <div className="text-muted-foreground text-sm">
-                      Grades 11-12 programs
-                    </div>
-                  </div>
-                </Label>
-              </RadioGroup>
-            </div>
-
-            {registrationType === "college" && (
-              <div className="space-y-4 pt-2">
-                <div className="space-y-2">
-                  <Label htmlFor="student-number" className="text-base">
-                    Student Number
-                  </Label>
-                  <div className="relative">
-                    <User className="text-muted-foreground absolute top-3 left-3 h-5 w-5" />
-                    <Input
-                      id="student-number"
-                      placeholder="Enter your student number"
-                      className="h-12 pl-10"
-                      onChange={(e) => handleStudIdChange(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <p className="text-muted-foreground text-xs">
-                    Your student number can be found on your ID card
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="first-name" className="text-base">
-                    First Name
-                  </Label>
-                  <Input
-                    id="first-name"
-                    defaultValue={student?.firstName}
-                    className="h-12"
-                    disabled
-                  />
-                  <p className="text-muted-foreground text-xs">
-                    Enter your student ID to automatically fill this field.
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="middle-name" className="text-base">
-                    Middle Name
-                  </Label>
-                  <Input
-                    id="middle-name"
-                    defaultValue={student?.middleName}
-                    className="h-12"
-                    disabled
-                  />
-                  <p className="text-muted-foreground text-xs">
-                    Enter your student ID to automatically fill this field.
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="last-name" className="text-base">
-                    Last Name
-                  </Label>
-                  <Input
-                    id="last-name"
-                    defaultValue={student?.lastName}
-                    className="h-12"
-                    disabled
-                  />
-                  <p className="text-muted-foreground text-xs">
-                    Enter your student ID to automatically fill this field.
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="birthday" className="text-base">
-                    Birthday
-                  </Label>
-                  <div className="relative">
-                    <Calendar className="text-muted-foreground pointer-events-none absolute top-3 left-3 z-10 h-5 w-5" />
-                    <DatePicker
-                      id="birthday"
-                      selected={birthday}
-                      onChange={(date: Date | null) => setBirthday(date)}
-                      placeholderText="yyyy-MM-dd"
-                      className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring h-12 w-full rounded-md border px-3 py-2 pl-10 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-                      dateFormat="yyyy-MM-dd"
-                      wrapperClassName="w-full"
-                      showYearDropdown
-                      scrollableYearDropdown
-                      yearDropdownItemNumber={50}
-                      required
-                    />
-                  </div>
-                  <p className="text-muted-foreground text-xs">
-                    Follow the format: yyyy-MM-dd
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {registrationType === "senior-high" && (
-              <div className="space-y-4 pt-2">
-                <div className="space-y-2">
-                  <Label htmlFor="student-number" className="text-base">
-                    Student Number
-                  </Label>
-                  <div className="relative">
-                    <User className="text-muted-foreground absolute top-3 left-3 h-5 w-5" />
-                    <Input
-                      id="student-number"
-                      placeholder="Enter your student number"
-                      className="h-12 pl-10"
-                      onChange={(e) => setStudNum(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <p className="text-muted-foreground text-xs">
-                    Your student number can be found on your ID card
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="first-name" className="text-base">
-                    First Name
-                  </Label>
-                  <Input
-                    id="first-name"
-                    placeholder="Enter your first name"
-                    onChange={(e) => setFirstName(e.target.value)}
-                    className="h-12"
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="middle-name" className="text-base">
-                    Middle Name
-                  </Label>
-                  <Input
-                    id="middle-name"
-                    placeholder="Enter your middle name"
-                    onChange={(e) => setMiddleName(e.target.value)}
-                    className="h-12"
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="last-name" className="text-base">
-                    Last Name
-                  </Label>
-                  <Input
-                    id="last-name"
-                    placeholder="Enter your last name"
-                    onChange={(e) => setLastName(e.target.value)}
-                    className="h-12"
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="birthday" className="text-base">
-                    Birthday
-                  </Label>
-                  <div className="relative">
-                    <Calendar className="text-muted-foreground pointer-events-none absolute top-3 left-3 z-10 h-5 w-5" />
-                    <DatePicker
-                      id="birthday"
-                      selected={birthday}
-                      onChange={(date: Date | null) => setBirthday(date)}
-                      placeholderText="yyyy-MM-dd"
-                      className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring h-12 w-full rounded-md border px-3 py-2 pl-10 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-                      dateFormat="yyyy-MM-dd"
-                      wrapperClassName="w-full"
-                      showYearDropdown
-                      scrollableYearDropdown
-                      yearDropdownItemNumber={50}
-                      required
-                    />
-                  </div>
-                  <p className="text-muted-foreground text-xs">
-                    Follow the format: yyyy-MM-dd
-                  </p>
-                </div>
-              </div>
-            )}
-
-            <Button
-              variant={"destructive"}
-              className="mt-4 flex h-12 w-full items-center justify-center gap-2 text-base"
-              onClick={handleRegister}
-              disabled={!registrationType || isSubmitting}
+          <div className="space-y-3">
+            <Label className="text-base">I am registering as:</Label>
+            <RadioGroup
+              value={registrationType}
+              onValueChange={setRegistrationType}
+              className="grid grid-cols-1 gap-2"
             >
-              Register
-              <ChevronRight className="h-4 w-4" />
-            </Button>
+              <Label
+                htmlFor="college"
+                className={cn(
+                  "flex cursor-pointer items-center space-x-3 rounded-lg border p-4 transition-colors",
+                  registrationType === "college"
+                    ? "border-primary bg-primary/5"
+                    : "hover:bg-muted/50",
+                )}
+              >
+                <RadioGroupItem value="college" id="college" />
+                <div className="flex-1">
+                  <div className="font-medium">College Student</div>
+                  <div className="text-muted-foreground text-sm">
+                    CICT Students
+                  </div>
+                </div>
+              </Label>
+
+              <Label
+                htmlFor="senior-high"
+                className={cn(
+                  "flex cursor-pointer items-center space-x-3 rounded-lg border p-4 transition-colors",
+                  registrationType === "senior-high"
+                    ? "border-primary bg-primary/5"
+                    : "hover:bg-muted/50",
+                )}
+              >
+                <RadioGroupItem value="senior-high" id="senior-high" />
+                <div className="flex-1">
+                  <div className="font-medium">Senior High School Student</div>
+                  <div className="text-muted-foreground text-sm">
+                    Grades 11-12 programs
+                  </div>
+                </div>
+              </Label>
+            </RadioGroup>
+          </div>
+
+          {registrationType === "college" && (
+            <div className="space-y-4 pt-2">
+              <div className="space-y-2">
+                <Label htmlFor="student-number" className="text-base">
+                  Student Number
+                </Label>
+                <div className="relative">
+                  <User className="text-muted-foreground absolute top-3 left-3 h-5 w-5" />
+                  <Input
+                    id="student-number"
+                    placeholder="Enter your student number"
+                    className="h-12 pl-10"
+                    onChange={e => handleStudIdChange(e.target.value)}
+                    required
+                  />
+                </div>
+                <p className="text-muted-foreground text-xs">
+                  Your student number can be found on your ID card
+                </p>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="first-name" className="text-base">
+                  First Name
+                </Label>
+                <Input
+                  id="first-name"
+                  defaultValue={student?.firstName}
+                  className="h-12"
+                  disabled
+                />
+                <p className="text-muted-foreground text-xs">
+                  Enter your student ID to automatically fill this field.
+                </p>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="middle-name" className="text-base">
+                  Middle Name
+                </Label>
+                <Input
+                  id="middle-name"
+                  defaultValue={student?.middleName}
+                  className="h-12"
+                  disabled
+                />
+                <p className="text-muted-foreground text-xs">
+                  Enter your student ID to automatically fill this field.
+                </p>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="last-name" className="text-base">
+                  Last Name
+                </Label>
+                <Input
+                  id="last-name"
+                  defaultValue={student?.lastName}
+                  className="h-12"
+                  disabled
+                />
+                <p className="text-muted-foreground text-xs">
+                  Enter your student ID to automatically fill this field.
+                </p>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="birthday" className="text-base">
+                  Birthday
+                </Label>
+                <div className="relative">
+                  <Calendar className="text-muted-foreground pointer-events-none absolute top-3 left-3 z-10 h-5 w-5" />
+                  <DatePicker
+                    id="birthday"
+                    selected={birthday}
+                    onChange={(date: Date | null) => setBirthday(date)}
+                    placeholderText="yyyy-MM-dd"
+                    className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring h-12 w-full rounded-md border px-3 py-2 pl-10 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                    dateFormat="yyyy-MM-dd"
+                    wrapperClassName="w-full"
+                    showYearDropdown
+                    scrollableYearDropdown
+                    yearDropdownItemNumber={50}
+                    required
+                  />
+                </div>
+                <p className="text-muted-foreground text-xs">
+                  Follow the format: yyyy-MM-dd
+                </p>
+              </div>
+            </div>
+          )}
+
+          {registrationType === "senior-high" && (
+            <div className="space-y-4 pt-2">
+              <div className="space-y-2">
+                <Label htmlFor="student-number" className="text-base">
+                  Student Number
+                </Label>
+                <div className="relative">
+                  <User className="text-muted-foreground absolute top-3 left-3 h-5 w-5" />
+                  <Input
+                    id="student-number"
+                    placeholder="Enter your student number"
+                    className="h-12 pl-10"
+                    onChange={e => setStudNum(e.target.value)}
+                    required
+                  />
+                </div>
+                <p className="text-muted-foreground text-xs">
+                  Your student number can be found on your ID card
+                </p>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="first-name" className="text-base">
+                  First Name
+                </Label>
+                <Input
+                  id="first-name"
+                  placeholder="Enter your first name"
+                  onChange={e => setFirstName(e.target.value)}
+                  className="h-12"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="middle-name" className="text-base">
+                  Middle Name
+                </Label>
+                <Input
+                  id="middle-name"
+                  placeholder="Enter your middle name"
+                  onChange={e => setMiddleName(e.target.value)}
+                  className="h-12"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="last-name" className="text-base">
+                  Last Name
+                </Label>
+                <Input
+                  id="last-name"
+                  placeholder="Enter your last name"
+                  onChange={e => setLastName(e.target.value)}
+                  className="h-12"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="birthday" className="text-base">
+                  Birthday
+                </Label>
+                <div className="relative">
+                  <Calendar className="text-muted-foreground pointer-events-none absolute top-3 left-3 z-10 h-5 w-5" />
+                  <DatePicker
+                    id="birthday"
+                    selected={birthday}
+                    onChange={(date: Date | null) => setBirthday(date)}
+                    placeholderText="yyyy-MM-dd"
+                    className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring h-12 w-full rounded-md border px-3 py-2 pl-10 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                    dateFormat="yyyy-MM-dd"
+                    wrapperClassName="w-full"
+                    showYearDropdown
+                    scrollableYearDropdown
+                    yearDropdownItemNumber={50}
+                    required
+                  />
+                </div>
+                <p className="text-muted-foreground text-xs">
+                  Follow the format: yyyy-MM-dd
+                </p>
+              </div>
+            </div>
+          )}
+
+          <Button
+            variant={"destructive"}
+            className="mt-4 flex h-12 w-full items-center justify-center gap-2 text-base"
+            onClick={handleRegister}
+            disabled={!registrationType || isSubmitting}
+          >
+            Register
+            <ChevronRight className="h-4 w-4" />
+          </Button>
         </div>
       </div>
     </div>
