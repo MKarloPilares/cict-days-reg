@@ -70,7 +70,7 @@ export default function WelcomePage() {
                 <Clock className="mt-1 h-5 w-5 flex-shrink-0 text-[#8B1A1A]" />
                 <div>
                   <p className="font-medium">Time</p>
-                  <p className="text-gray-600">8:00 AM - 5:00 PM</p>
+                  <p className="text-gray-600">8:00 AM - 12:00 PM</p>
                 </div>
               </div>
 
@@ -86,8 +86,8 @@ export default function WelcomePage() {
               </div>
             </div>
           </div>
-          <div className="relative h-[400px] overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-lg md:h-[500px]">
-            <div className="absolute inset-0 flex items-center justify-center">
+          <div className="relative h-[30rem] overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-lg md:h-[500px]">
+            <div className="absolute inset-0 flex justify-center mt-4">
               <div className="relative h-64 w-64">
                 <motion.div
                   className="absolute top-1/2 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2 transform rounded-full bg-[#8B1A1A] p-6 text-white shadow-lg"
@@ -186,8 +186,8 @@ export default function WelcomePage() {
                 Explore the Future of Technology
               </h3>
               <p className="text-gray-700">
-                Join us for workshops, talks, and hands-on experiences with
-                cutting-edge technology
+              Join us as we hear from experts and industry leaders about the latest trends and 
+              opportunities that students can engage with to shape their future careers!
               </p>
             </div>
           </div>

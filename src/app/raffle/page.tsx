@@ -90,11 +90,12 @@ export default function Raffle() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-slate-50 to-slate-100 p-4">
+    <div className="flex min-h-svh flex-col items-center justify-center bg-gradient-to-b from-slate-50 to-slate-100 p-2">
+      <h1 className="text-6xl font-bold mb-3">CICT IT CONGRESS 2025</h1>
       {showConfetti && <ConfettiEffect />}
 
-      <Card className="w-full max-w-md border-0 bg-white/80 shadow-lg backdrop-blur-sm">
-        <CardHeader className="pb-2 text-center">
+      <Card className="w-[50rem] border-0 bg-white/80 shadow-lg backdrop-blur-sm">
+        <CardHeader className="pb-1 text-center">
           <div className="mb-2 flex items-center justify-center gap-2">
             <Badge
               variant="outline"
@@ -106,19 +107,19 @@ export default function Raffle() {
           </div>
           <CardTitle className="flex items-center justify-center gap-2 text-3xl font-bold tracking-tight">
             <span className="text-2xl">🎉</span>
-            Raffle Draw
+              Raffle
             <span className="text-2xl">🎉</span>
           </CardTitle>
         </CardHeader>
 
-        <CardContent className="pt-4 pb-6">
+        <CardContent className="pt-2 pb-6">
           <div className="flex flex-col items-center justify-center gap-6">
             <div className="relative w-full">
               <div className="absolute inset-0 flex items-center">
-                <div className="border-muted w-full border-t"></div>
+                <div className="border-muted w-full border-t mb-6"></div>
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="text-muted-foreground bg-white px-2">
+                <span className="text-muted-foreground bg-white mb-6 text-2xl ">
                   Current Winner
                 </span>
               </div>
@@ -137,12 +138,12 @@ export default function Raffle() {
                   <>
                     <div className="relative">
                       `&quot;`
-                      <div className="bg-primary text-primary-foreground absolute -right-2 -bottom-2 rounded-full p-2">
+                      <div className="bg-primary text-primary-foreground absolute -right-11 -bottom-3 rounded-full p-2 text-6xl">
                         🏆
                       </div>
                     </div>
-                    <div className="text-center">
-                      <h3 className="text-2xl font-bold">{winner}</h3>
+                    <div className="text-center mt-2">
+                      <h3 className="text-4xl font-bold animate-pulse">{winner}</h3>
                       <p className="text-muted-foreground">Congratulations!</p>
                     </div>
                   </>
@@ -158,7 +159,7 @@ export default function Raffle() {
         <CardFooter>
           <Button
             size="lg"
-            className="w-full text-lg font-medium"
+            className="w-full text-lg font-medium bg-[#8AAAE5] hover:bg-[#7792c4]"
             onClick={drawWinner}
             disabled={isDrawing}
           >
@@ -168,7 +169,7 @@ export default function Raffle() {
         <CardFooter>
           <Button
             size="lg"
-            className="w-full text-lg font-medium"
+            className="w-full text-lg font-medium bg-[#EA738D] hover:bg-[#c56e81]"
             onClick={() => router.push("/attendance")}
             disabled={isDrawing}
           >
