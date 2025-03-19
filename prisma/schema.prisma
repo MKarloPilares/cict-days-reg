@@ -14,28 +14,53 @@ datasource db {
 }
 
 model Students {
-  id          String   @id @unique
-  studLevel   String
-  lastName    String
-  firstName   String
-  middleName  String
-  prefCourse  String
-  mobile      String
-  birthday    DateTime @db.Date 
-  createdAt   DateTime @default(now()) @map("created_at")
+  id         String   @id @unique
+  studLevel  String
+  lastName   String
+  firstName  String
+  middleName String
+  prefCourse String
+  mobile     String
+  birthday   DateTime @db.Date
+  createdAt  DateTime @default(now()) @map("created_at")
 
-  reg       Registrations?   @relation
+  reg Registrations? @relation
 
   @@map("students")
 }
 
 model Registrations {
-  id          Int      @id @default(autoincrement())
-  studId      String   @unique @map("stud_id")
-  createdAt   DateTime @default(now()) @map("created_at")
-  win         Boolean @default(false)
+  id        Int      @id @default(autoincrement())
+  studId    String   @unique @map("stud_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  win       Boolean  @default(false)
 
-  stud       Students   @relation(fields: [studId], references: [id])
+  stud Students @relation(fields: [studId], references: [id])
 
   @@map("registrations")
+}
+
+model LiveResponse {
+  uniqueLink String @id @map("unique_link")
+  text       String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  emojis LiveResponeEmoji[]
+
+  @@map("live_responses")
+}
+
+model LiveResponeEmoji {
+  id               Int    @id @default(autoincrement())
+  liveResponseLink String @map("live_response")
+  emoji            String @unique
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  liveResponse LiveResponse @relation(fields: [liveResponseLink], references: [uniqueLink])
+
+  @@map("live_response_emojis")
 }
