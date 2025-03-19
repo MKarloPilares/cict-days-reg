@@ -38,6 +38,7 @@ export default function Register() {
     if (registrationType === "college") {
           try {
             if (studId.length === 7) {
+                setStudent(await getStudent({ id: studId }));
                 await createRegistration({ id: studId });
                 e.target.value="";
               }
@@ -163,30 +164,42 @@ export default function Register() {
                   Your student number can be found on your ID card
                 </p>
               </div>
-              {/* <div className="space-y-2">
-                <Label htmlFor="birthday" className="text-base">
-                  Birthday <span className="text-blue-500">(For Verification)</span>
+              <div className="space-y-2">
+                <Label htmlFor="first-name" className="text-base">
+                  First Name
                 </Label>
-                <div className="relative">
-                  <Calendar className="text-muted-foreground pointer-events-none absolute top-3 left-3 z-10 h-5 w-5" />
-                  <DatePicker
-                    id="birthday"
-                    selected={student?.birthday}
-                    onChange={(date: Date | null) => setBirthday(date)}
-                    placeholderText="yyyy-MM-dd"
-                    className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring h-12 w-full rounded-md border px-3 py-2 pl-10 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-                    dateFormat="yyyy-MM-dd"
-                    wrapperClassName="w-full"
-                    showYearDropdown
-                    scrollableYearDropdown
-                    yearDropdownItemNumber={50}
-                    required
-                  />
-                </div>
-                <p className="text-muted-foreground text-xs">
-                  Follow the format: yyyy-MM-dd
-                </p>
-              </div> */}
+                <Input
+                  id="first-name"
+                  placeholder="Enter your first name"
+                  defaultValue={student?.firstName}
+                  className="h-12"
+                  disabled
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="middle-name" className="text-base">
+                  Middle Name
+                </Label>
+                <Input
+                  id="middle-name"
+                  placeholder="Enter your middle name"
+                  defaultValue={student?.middleName}
+                  className="h-12"
+                  disabled
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="last-name" className="text-base">
+                  Last Name
+                </Label>
+                <Input
+                  id="last-name"
+                  placeholder="Enter your last name"
+                  defaultValue={student?.lastName}
+                  className="h-12"
+                  disabled
+                />
+              </div>
             </div>
           )}
 
@@ -272,7 +285,7 @@ export default function Register() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="birthday" className="text-base">
-                  Birthday <span className="text-blue-500">(For Verification)</span>
+                  Birthday
                 </Label>
                 <div className="relative">
                   <Calendar className="text-muted-foreground pointer-events-none absolute top-3 left-3 z-10 h-5 w-5" />
@@ -299,7 +312,8 @@ export default function Register() {
 
           <Button
             variant={"destructive"}
-            className="mt-4 flex h-12 w-full items-center justify-center gap-2 text-base"
+            className={`mt-4 flex h-12 w-full items-center justify-center gap-2 text-base
+              ${registrationType === "senior-high" ? "" : "hidden"}`}
             onClick={handleSHSRegister}
             disabled={!registrationType || isSubmitting}
           >
