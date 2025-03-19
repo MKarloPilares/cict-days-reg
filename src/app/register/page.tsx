@@ -32,35 +32,25 @@ export default function Register() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
-  const handleStudIdChange = async (studId: string) => {
-    setStudent(await getStudent({ id: studId }));
+  const handleCollegeRegister = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsSubmitting(true);
+    const studId = e.target.value.replace(/^0+/, '')
+    if (registrationType === "college") {
+          try {
+            if (studId.length === 7) {
+                await createRegistration({ id: studId });
+                e.target.value="";
+              }
+            } catch (error) {
+              console.log(error);
+              alert("This student is already registered");
+              setIsSubmitting(false);
+            }
+    }
   };
 
-  const handleRegister = async () => {
-    setIsSubmitting(true);
-    if (registrationType === "college") {
-      if (birthday && student?.birthday) {
-        if (
-          format(birthday, "yyyy-MM-dd") ===
-          format(student?.birthday, "yyyy-MM-dd")
-        ) {
-          try {
-            await createRegistration({ id: student!.id });
-            router.push("/done");
-          } catch (error) {
-            console.log(error);
-            alert("This student is already registered");
-            setIsSubmitting(false);
-          }
-        } else {
-          alert("Birthday does not match the student's birthday");
-          setIsSubmitting(false);
-        }
-      } else {
-        alert("Please input birthday");
-        setIsSubmitting(false);
-      }
-    } else {
+  const handleSHSRegister = async () => {
+    setIsSubmitting(true);{
       if (birthday) {
         try {
           await createStudent({
@@ -163,8 +153,9 @@ export default function Register() {
                   <Input
                     id="student-number"
                     placeholder="Enter your student number"
+                    defaultValue={studNum}
                     className="h-12 pl-10"
-                    onChange={e => handleStudIdChange(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleCollegeRegister(e)}
                     required
                   />
                 </div>
@@ -172,49 +163,7 @@ export default function Register() {
                   Your student number can be found on your ID card
                 </p>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="first-name" className="text-base">
-                  First Name
-                </Label>
-                <Input
-                  id="first-name"
-                  defaultValue={student?.firstName}
-                  className="h-12"
-                  disabled
-                />
-                <p className="text-muted-foreground text-xs">
-                  Enter your student ID to automatically fill this field.
-                </p>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="middle-name" className="text-base">
-                  Middle Name
-                </Label>
-                <Input
-                  id="middle-name"
-                  defaultValue={student?.middleName}
-                  className="h-12"
-                  disabled
-                />
-                <p className="text-muted-foreground text-xs">
-                  Enter your student ID to automatically fill this field.
-                </p>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="last-name" className="text-base">
-                  Last Name
-                </Label>
-                <Input
-                  id="last-name"
-                  defaultValue={student?.lastName}
-                  className="h-12"
-                  disabled
-                />
-                <p className="text-muted-foreground text-xs">
-                  Enter your student ID to automatically fill this field.
-                </p>
-              </div>
-              <div className="space-y-2">
+              {/* <div className="space-y-2">
                 <Label htmlFor="birthday" className="text-base">
                   Birthday <span className="text-blue-500">(For Verification)</span>
                 </Label>
@@ -222,7 +171,7 @@ export default function Register() {
                   <Calendar className="text-muted-foreground pointer-events-none absolute top-3 left-3 z-10 h-5 w-5" />
                   <DatePicker
                     id="birthday"
-                    selected={birthday}
+                    selected={student?.birthday}
                     onChange={(date: Date | null) => setBirthday(date)}
                     placeholderText="yyyy-MM-dd"
                     className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring h-12 w-full rounded-md border px-3 py-2 pl-10 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
@@ -237,7 +186,7 @@ export default function Register() {
                 <p className="text-muted-foreground text-xs">
                   Follow the format: yyyy-MM-dd
                 </p>
-              </div>
+              </div> */}
             </div>
           )}
 
@@ -351,7 +300,7 @@ export default function Register() {
           <Button
             variant={"destructive"}
             className="mt-4 flex h-12 w-full items-center justify-center gap-2 text-base"
-            onClick={handleRegister}
+            onClick={handleSHSRegister}
             disabled={!registrationType || isSubmitting}
           >
             Register
