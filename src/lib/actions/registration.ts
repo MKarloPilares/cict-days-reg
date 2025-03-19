@@ -13,12 +13,18 @@ const createRegistration = async ({ id }: { id: string }) => {
 
 const getRaffleEntries = async () => {
   return await prisma.registrations.findMany({
-    where: { win: false },
+    where: { 
+      win: false,
+      stud: {
+        studLevel: "College",
+      },
+    },
     include: {
       stud: true,
     },
   });
 };
+
 
 const setWin = async (id: number) => {
   return await prisma.registrations.update({

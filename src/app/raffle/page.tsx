@@ -34,6 +34,7 @@ interface Entry {
 export default function Raffle() {
   const [winner, setWinner] = useState<string | null>("N/A");
   const [isDrawing, setIsDrawing] = useState(false);
+  const [winnerPicked, setWinnerPicked] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [entries, setEntries] = useState<Entry[]>([]);
   const [participants, setParticipants] = useState<string[]>([]);
@@ -61,6 +62,7 @@ export default function Raffle() {
   const drawWinner = () => {
     setIsDrawing(true);
     setWinner(null);
+    setWinnerPicked(false);
 
     let counter = 0;
     const interval = setInterval(() => {
@@ -83,6 +85,7 @@ export default function Raffle() {
           setWinner(randomWinnerName);
           setWin(winnerEntry.id);
           setShowConfetti(true);
+          setWinnerPicked(true);
           setTimeout(() => setShowConfetti(false), 5000);
         }
       }
@@ -90,22 +93,13 @@ export default function Raffle() {
   };
 
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center bg-gradient-to-b from-slate-50 to-slate-100 p-2">
-      <h1 className="text-6xl font-bold mb-3">CICT IT CONGRESS 2025</h1>
+    <div className="flex min-h-svh w-full flex-col items-center justify-center bg-[url('/blank-bg.jpg')] bg-cover bg-center bg-no-repeat">
+      <h1 className="text-7xl mb-15 font-bold text-white">CICT IT CONGRESS 2025</h1>
       {showConfetti && <ConfettiEffect />}
 
-      <Card className="w-[50rem] border-0 bg-white/80 shadow-lg backdrop-blur-sm">
+      <Card className="w-[30rem] border-0 bg-white shadow-lg backdrop-blur-sm">
         <CardHeader className="pb-1 text-center">
-          <div className="mb-2 flex items-center justify-center gap-2">
-            <Badge
-              variant="outline"
-              className="bg-primary/10 text-primary border-primary/20 px-3 py-1"
-            >
-              <Confetti className="mr-1 h-4 w-4" />
-              Raffle Event
-            </Badge>
-          </div>
-          <CardTitle className="flex items-center justify-center gap-2 text-3xl font-bold tracking-tight">
+          <CardTitle className="flex items-center justify-center gap-2 mb-5 text-3xl font-bold tracking-tight">
             <span className="text-2xl">🎉</span>
               Raffle
             <span className="text-2xl">🎉</span>
@@ -116,13 +110,8 @@ export default function Raffle() {
           <div className="flex flex-col items-center justify-center gap-6">
             <div className="relative w-full">
               <div className="absolute inset-0 flex items-center">
-                <div className="border-muted w-full border-t mb-6"></div>
               </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="text-muted-foreground bg-white mb-6 text-2xl ">
-                  Current Winner
-                </span>
-              </div>
+              
             </div>
 
             <AnimatePresence mode="wait">
@@ -138,13 +127,19 @@ export default function Raffle() {
                   <>
                     <div className="relative">
                       `&quot;`
-                      <div className="bg-primary text-primary-foreground absolute -right-11 -bottom-3 rounded-full p-2 text-6xl">
+                      <div className="bg-primary text-primary-foreground absolute -right-16 -bottom-5 rounded-full p-5 text-7xl">
                         🏆
                       </div>
                     </div>
-                    <div className="text-center mt-2">
-                      <h3 className="text-4xl font-bold animate-pulse">{winner}</h3>
-                      <p className="text-muted-foreground">Congratulations!</p>
+                    <div className="text-center mt-2 w-full">
+                      <h3 className={`text-4xl font-bold ${winnerPicked ? 'text-amber-500 animate-pulse' : ''}`}>{winner}</h3>
+                      <div>
+                        {winnerPicked ? (
+                          <p className="text-muted-foreground text-3xl">Congratulations!</p>
+                        ) : (
+                          <p className="text-muted-foreground text-3xl"></p>
+                        )}
+                      </div>
                     </div>
                   </>
                 ) : (
@@ -164,16 +159,6 @@ export default function Raffle() {
             disabled={isDrawing}
           >
             {isDrawing ? "Drawing..." : "Draw Raffle"}
-          </Button>
-        </CardFooter>
-        <CardFooter>
-          <Button
-            size="lg"
-            className="w-full text-lg font-medium bg-[#EA738D] hover:bg-[#c56e81]"
-            onClick={() => router.push("/attendance")}
-            disabled={isDrawing}
-          >
-            View Attendees
           </Button>
         </CardFooter>
       </Card>
