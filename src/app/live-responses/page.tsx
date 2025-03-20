@@ -25,7 +25,9 @@ export default function LiveResponseCreation() {
 
       <Button variant="outline" className="text-xl" onClick={
         async () => {
+          console.log(text)
           const uniqueLink = randomBytes(16).toString("hex")
+          console.log(uniqueLink.length)
           await createLiveResponse({ uniqueLink, text })
 
           window.location.href = `/live-responses/${uniqueLink}/view`
