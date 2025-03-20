@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { SnowflakeIcon as Confetti } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,9 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { getRaffleEntries, setWin } from "@/lib/actions/registration";
-import { useRouter } from "next/navigation";
 
 interface Entry {
   id: number;
@@ -38,7 +35,6 @@ export default function Raffle() {
   const [showConfetti, setShowConfetti] = useState(false);
   const [entries, setEntries] = useState<Entry[]>([]);
   const [participants, setParticipants] = useState<string[]>([]);
-  const router = useRouter();
 
   useEffect(() => {
     const fetchParticipants = async () => {
