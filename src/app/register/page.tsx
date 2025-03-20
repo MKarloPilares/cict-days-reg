@@ -14,7 +14,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Students } from "@prisma/client";
 import { getStudent, createStudent } from "@/lib/actions/students";
 import { createRegistration } from "@/lib/actions/registration";
-import { format } from "date-fns";
 import { useRouter } from "next/navigation";
 
 import "react-datepicker/dist/react-datepicker.css";
