@@ -31,18 +31,23 @@ const getLiveResponse = async ({ uniqueLink }: { uniqueLink: string }) => {
 
 const upsertReaction = async ({
   uniqueLink,
+  userId,
   emoji,
 }: {
   uniqueLink: string;
+  userId: string;
   emoji: string;
 }) => {
   return prisma.liveResponeEmoji.upsert({
     where: {
-      liveResponseLink: uniqueLink,
-      emoji,
+      userId_liveResponseLink: {
+        userId,
+        liveResponseLink: uniqueLink,
+      },
     },
     create: {
       liveResponseLink: uniqueLink,
+      userId,
       emoji,
     },
     update: {
@@ -53,15 +58,28 @@ const upsertReaction = async ({
 };
 
 const getReactions = async ({ uniqueLink }: { uniqueLink: string }) => {
-  return prisma.liveResponeEmoji.groupBy({
-    by: ["emoji"],
-    where: {
-      liveResponseLink: uniqueLink,
-    },
-    _count: {
-      emoji: true,
-    },
-  });
+  return prisma.liveResponeEmoji
+    .findMany({
+      where: {
+        liveResponseLink: uniqueLink,
+      },
+      select: {
+        emoji: true,
+      },
+    })
+    .then(reactions => {
+      const reactionCounts = reactions.reduce(
+        (acc, { emoji }) => {
+          acc[emoji] = (acc[emoji] || 0) + 1;
+          return acc;
+        },
+        {} as Record<string, number>,
+      );
+      return Object.entries(reactionCounts).map(([emoji, count]) => ({
+        emoji,
+        count,
+      }));
+    });
 };
 
 export {

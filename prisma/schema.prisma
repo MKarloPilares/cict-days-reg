@@ -41,7 +41,7 @@ model Registrations {
 }
 
 model LiveResponse {
-  uniqueLink String @id @map("unique_link")
+  uniqueLink String @id @map("unique_link") @db.VarChar(32)
   text       String
 
   createdAt DateTime @default(now()) @map("created_at")
@@ -54,13 +54,15 @@ model LiveResponse {
 
 model LiveResponeEmoji {
   id               Int    @id @default(autoincrement())
-  liveResponseLink String @map("live_response")
-  emoji            String @unique
+  userId           String @map("user_id") @db.VarChar(32)
+  liveResponseLink String @map("live_response") @db.VarChar(32)
+  emoji            String @db.VarChar(15)
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   liveResponse LiveResponse @relation(fields: [liveResponseLink], references: [uniqueLink])
 
+  @@unique([userId, liveResponseLink])
   @@map("live_response_emojis")
 }
