@@ -1,5 +1,8 @@
-This registration system was developed for use during the event CICT Days of the UB College of Information and Communications Technology. It was made for students to register to the IT Congress 2025 Seminar by having the barcode in their schoold IDs scanned. Once scanned, student data is pulled from the university's database and is inputted to the system. Registered students become eligible to join the in the lottery feature of the system. This application also features a dashboard for administrators to manage registrants and lottery winners.
+This registration system was developed for use during the event CICT Days of the UB College of Information and Communications Technology. It was designed to facilitate student registration for the IT Congress 2025 Seminar.
 
+Students can register by having the barcode on their school IDs scanned. Once scanned, their data is retrieved from the university's database and automatically inputted into the system.
+
+Registered students become eligible to participate in the system's lottery feature. Additionally, the application includes a dashboard for administrators to manage registrants and lottery winners.
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
